@@ -71,6 +71,7 @@ func TestTailNode(t *testing.T) {
 				StableID:          "0",
 				HomeDERP:          0,
 				Hostinfo:          hiview(tailcfg.Hostinfo{}),
+				Online:            new(false),
 				MachineAuthorized: true,
 
 				CapMap: tailcfg.NodeCapMap{
@@ -157,6 +158,8 @@ func TestTailNode(t *testing.T) {
 					},
 				}),
 				Created: created,
+				LastSeen: &lastSeen,
+				Online:   new(false),
 
 				Tags: []string{},
 
@@ -185,6 +188,7 @@ func TestTailNode(t *testing.T) {
 				StableID:          "0",
 				HomeDERP:          0,
 				Hostinfo:          hiview(tailcfg.Hostinfo{}),
+				Online:            new(false),
 				MachineAuthorized: true,
 
 				CapMap: tailcfg.NodeCapMap{

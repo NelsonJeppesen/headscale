@@ -1224,6 +1224,8 @@ func (nv NodeView) TailNode(
 	// pass nil; their CapMap is replaced downstream by [policyv2.PeerCapMap].
 	maps.Copy(capMap, selfPolicyCaps)
 
+	online := nv.IsOnline().GetOr(false)
+
 	tNode := tailcfg.Node{
 		//nolint:gosec // G115: NodeID values are within int64 range
 		ID:       tailcfg.NodeID(nv.ID()),
@@ -1247,7 +1249,7 @@ func (nv NodeView) TailNode(
 		Hostinfo:      nv.Hostinfo(),
 		Created:       nv.CreatedAt().UTC(),
 
-		Online: nv.IsOnline().Clone(),
+		Online: &online,
 
 		Tags: nv.Tags().AsSlice(),
 
@@ -1258,7 +1260,7 @@ func (nv NodeView) TailNode(
 	// Set LastSeen only for offline nodes to avoid confusing Tailscale clients
 	// during rapid reconnection cycles. Online nodes should not have LastSeen set
 	// as this can make clients interpret them as "not online" despite Online=true.
-	if nv.LastSeen().Valid() && nv.IsOnline().Valid() && !nv.IsOnline().Get() {
+	if nv.LastSeen().Valid() && !online {
 		lastSeen := nv.LastSeen().Get()
 		tNode.LastSeen = &lastSeen
 	}
